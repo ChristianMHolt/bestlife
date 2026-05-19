@@ -1,0 +1,67 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="BitLifeClone.MainWindow"
+        Title="BitLife Clone"
+        Width="600" Height="400">
+
+    <Grid>
+        <!-- Setup Screen -->
+        <StackPanel Name="SetupPanel" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+            <TextBlock Text="Welcome to BitLife Clone!" FontSize="20" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+            <TextBlock Text="Enter your first name:" />
+            <TextBox Name="NameTextBox" Width="200" />
+
+            <TextBlock Text="Select your gender:" Margin="0,10,0,0"/>
+            <ComboBox Name="GenderComboBox" Width="200" SelectedIndex="0">
+                <ComboBoxItem>Male</ComboBoxItem>
+                <ComboBoxItem>Female</ComboBoxItem>
+            </ComboBox>
+
+            <Button Content="Start Game" Name="StartButton" HorizontalAlignment="Center" Margin="0,20,0,0" Click="StartButton_Click"/>
+        </StackPanel>
+
+        <!-- Main Game Screen -->
+        <Grid Name="GamePanel" IsVisible="False" Margin="10" RowDefinitions="Auto,*,Auto">
+            <!-- Stats -->
+            <StackPanel Grid.Row="0" Spacing="5" Margin="0,0,0,10">
+                <TextBlock Name="NameGenderAgeBlock" FontWeight="Bold" FontSize="16" />
+                <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,*,Auto,*">
+                    <TextBlock Grid.Column="0" Text="Health: " FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="1" Name="HealthBlock" />
+
+                    <TextBlock Grid.Column="2" Text=" Happiness: " FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="3" Name="HappinessBlock" />
+
+                    <TextBlock Grid.Column="4" Text=" Smarts: " FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="5" Name="SmartsBlock" />
+
+                    <TextBlock Grid.Column="6" Text=" Looks: " FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="7" Name="LooksBlock" />
+                </Grid>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <TextBlock Text="Money: " FontWeight="SemiBold" />
+                    <TextBlock Name="MoneyBlock" />
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Activity Log -->
+            <ListBox Grid.Row="1" Name="ActivityLog" Margin="0,10,0,10" Background="#1E1E1E" Foreground="White">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Padding" Value="5,2" />
+                    </Style>
+                </ListBox.Styles>
+            </ListBox>
+
+            <!-- Action Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                <Button Name="AgeUpButton" Content="Age Up" Click="AgeUpButton_Click" Background="#4CAF50" Foreground="White" />
+                <Button Name="GymButton" Content="Go to Gym" Click="GymButton_Click" />
+                <Button Name="BookButton" Content="Read a Book" Click="BookButton_Click" />
+                <Button Name="WorkButton" Content="Go to Work" Click="WorkButton_Click" />
+                <Button Name="RestartButton" Content="Restart" Click="RestartButton_Click" IsVisible="False" Background="#F44336" Foreground="White"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
