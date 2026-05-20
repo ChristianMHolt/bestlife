@@ -93,6 +93,10 @@ namespace BitLifeClone
             ApplyJobButton.IsEnabled = enable;
             SpendTimeButton.IsEnabled = enable;
             ArgueButton.IsEnabled = enable;
+
+            ShowActivitiesButton.IsEnabled = enable;
+            ShowEducationButton.IsEnabled = enable;
+            ShowRelationshipsButton.IsEnabled = enable;
         }
 
         private void CheckDeath()
@@ -206,6 +210,34 @@ namespace BitLifeClone
             }
         }
 
+        // --- Navigation ---
+
+        private void ShowActivities_Click(object? sender, RoutedEventArgs e)
+        {
+            MainMenuPanel.IsVisible = false;
+            ActivitiesPanel.IsVisible = true;
+        }
+
+        private void ShowEducation_Click(object? sender, RoutedEventArgs e)
+        {
+            MainMenuPanel.IsVisible = false;
+            EducationPanel.IsVisible = true;
+        }
+
+        private void ShowRelationships_Click(object? sender, RoutedEventArgs e)
+        {
+            MainMenuPanel.IsVisible = false;
+            RelationshipsPanel.IsVisible = true;
+        }
+
+        private void BackButton_Click(object? sender, RoutedEventArgs e)
+        {
+            ActivitiesPanel.IsVisible = false;
+            EducationPanel.IsVisible = false;
+            RelationshipsPanel.IsVisible = false;
+            MainMenuPanel.IsVisible = true;
+        }
+
         // --- Events ---
 
         private void ShowEventPopup(Event evt)
@@ -243,6 +275,7 @@ namespace BitLifeClone
             _engine = new GameEngine();
             _engine.OnLog = Log;
             _engine.OnEventTriggered = ShowEventPopup;
+            BackButton_Click(null, null);
         }
     }
 }
