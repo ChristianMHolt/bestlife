@@ -9,7 +9,7 @@ namespace BitLifeClone
         public int Age { get; set; }
         public int Health { get; set; }
         public int Happiness { get; set; }
-        public int Smarts { get; set; }
+        public double Smarts { get; set; }
         public int Looks { get; set; }
         public decimal Money { get; set; }
         public string CurrentEducation { get; set; } = "None";
