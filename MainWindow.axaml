@@ -2,58 +2,71 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="BitLifeClone.MainWindow"
         Title="BitLife Clone"
-        Width="600" Height="400">
+        Width="600" Height="400"
+        Background="#0f172a">
 
     <Grid>
         <!-- Setup Screen -->
-        <StackPanel Name="SetupPanel" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
-            <TextBlock Text="Welcome to BitLife Clone!" FontSize="20" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+        <Border Name="SetupPanel" Background="#1e293b" CornerRadius="12" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Welcome to BitLife Clone!" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
-            <TextBlock Text="Enter your first name:" />
-            <TextBox Name="NameTextBox" Width="200" />
+                <TextBlock Text="Enter your first name:" />
+                <TextBox Name="NameTextBox" Width="200" />
 
-            <TextBlock Text="Select your gender:" Margin="0,10,0,0"/>
-            <ComboBox Name="GenderComboBox" Width="200" SelectedIndex="0">
-                <ComboBoxItem>Male</ComboBoxItem>
-                <ComboBoxItem>Female</ComboBoxItem>
-            </ComboBox>
+                <TextBlock Text="Select your gender:" Margin="0,10,0,0"/>
+                <ComboBox Name="GenderComboBox" Width="200" SelectedIndex="0">
+                    <ComboBoxItem>Male</ComboBoxItem>
+                    <ComboBoxItem>Female</ComboBoxItem>
+                </ComboBox>
 
-            <Button Content="Start Game" Name="StartButton" HorizontalAlignment="Center" Margin="0,20,0,0" Click="StartButton_Click"/>
-        </StackPanel>
+                <Button Content="Start Game" Name="StartButton" HorizontalAlignment="Center" Margin="0,20,0,0" Click="StartButton_Click" Background="#3b82f6" Foreground="White"/>
+            </StackPanel>
+        </Border>
 
         <!-- Main Game Screen -->
         <Grid Name="GamePanel" IsVisible="False" Margin="10" RowDefinitions="Auto,*">
             <!-- Stats (Always Visible) -->
             <StackPanel Grid.Row="0" Spacing="5" Margin="0,0,0,10">
                 <TextBlock Name="NameGenderAgeBlock" FontWeight="Bold" FontSize="16" />
-                <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,*,Auto,*">
-                    <TextBlock Grid.Column="0" Text="Health: " FontWeight="SemiBold"/>
-                    <TextBlock Grid.Column="1" Name="HealthBlock" />
+                <Grid ColumnDefinitions="Auto,*,Auto,Auto,*,Auto,Auto,*,Auto,Auto,*,Auto">
+                    <TextBlock Grid.Column="0" Text="Health: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <ProgressBar Grid.Column="1" Name="HealthBar" Minimum="0" Maximum="100" Foreground="#10b981" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBlock Grid.Column="2" Name="HealthBlock" VerticalAlignment="Center"/>
 
-                    <TextBlock Grid.Column="2" Text=" Happiness: " FontWeight="SemiBold"/>
-                    <TextBlock Grid.Column="3" Name="HappinessBlock" />
+                    <TextBlock Grid.Column="3" Text=" Happiness: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <ProgressBar Grid.Column="4" Name="HappinessBar" Minimum="0" Maximum="100" Foreground="#f59e0b" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBlock Grid.Column="5" Name="HappinessBlock" VerticalAlignment="Center"/>
 
-                    <TextBlock Grid.Column="4" Text=" Smarts: " FontWeight="SemiBold"/>
-                    <TextBlock Grid.Column="5" Name="SmartsBlock" />
+                    <TextBlock Grid.Column="6" Text=" Smarts: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <ProgressBar Grid.Column="7" Name="SmartsBar" Minimum="0" Maximum="100" Foreground="#3b82f6" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBlock Grid.Column="8" Name="SmartsBlock" VerticalAlignment="Center"/>
 
-                    <TextBlock Grid.Column="6" Text=" Looks: " FontWeight="SemiBold"/>
-                    <TextBlock Grid.Column="7" Name="LooksBlock" />
+                    <TextBlock Grid.Column="9" Text=" Looks: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <ProgressBar Grid.Column="10" Name="LooksBar" Minimum="0" Maximum="100" Foreground="#ec4899" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBlock Grid.Column="11" Name="LooksBlock" VerticalAlignment="Center"/>
                 </Grid>
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                    <TextBlock Text="Money: " FontWeight="SemiBold" />
-                    <TextBlock Name="MoneyBlock" />
-                    <TextBlock Text=" | Education: " FontWeight="SemiBold" Margin="10,0,0,0" />
-                    <TextBlock Name="EducationBlock" />
-                    <TextBlock Text=" | Job: " FontWeight="SemiBold" Margin="10,0,0,0" />
-                    <TextBlock Name="JobBlock" />
+                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Money: " FontWeight="Bold" Foreground="#3b82f6"/>
+                        <TextBlock Name="MoneyBlock" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Education: " FontWeight="Bold" Foreground="#3b82f6"/>
+                        <TextBlock Name="EducationBlock" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Job: " FontWeight="Bold" Foreground="#3b82f6"/>
+                        <TextBlock Name="JobBlock" FontWeight="SemiBold"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
 
-            <TabControl Grid.Row="1">
+            <TabControl Grid.Row="1" Margin="0,10,0,0">
                 <!-- Main & Log Tab -->
                 <TabItem Header="Main &amp; Log">
                     <Grid RowDefinitions="*,Auto">
-                        <ListBox Grid.Row="0" Name="ActivityLog" Margin="0,10,0,10" Background="#1E1E1E" Foreground="White">
+                        <ListBox Grid.Row="0" Name="ActivityLog" Margin="0,10,0,10" Background="#1e293b" Foreground="White">
                             <ListBox.Styles>
                                 <Style Selector="ListBoxItem">
                                     <Setter Property="Padding" Value="5,2" />
@@ -112,8 +125,8 @@
         </Grid>
 
         <!-- Event Popup Overlay -->
-        <Border Name="EventOverlay" IsVisible="False" Background="#80000000" Grid.RowSpan="3">
-            <Border Background="#333333" Width="400" Height="250" CornerRadius="10" Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border Name="EventOverlay" IsVisible="False" Background="#B3000000" Grid.RowSpan="3">
+            <Border Background="#1e293b" Width="400" Height="250" CornerRadius="16" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Grid RowDefinitions="*,Auto">
                     <TextBlock Grid.Row="0" Name="EventPromptBlock" TextWrapping="Wrap" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <StackPanel Grid.Row="1" Name="EventChoicesPanel" Orientation="Vertical" Spacing="10" />

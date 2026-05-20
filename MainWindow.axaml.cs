@@ -56,9 +56,13 @@ namespace BitLifeClone
 
             NameGenderAgeBlock.Text = $"Name: {_engine.Player.Name} | Gender: {_engine.Player.Gender} | Age: {_engine.Player.Age}";
             HealthBlock.Text = $"{_engine.Player.Health}%";
+            HealthBar.Value = _engine.Player.Health;
             HappinessBlock.Text = $"{_engine.Player.Happiness}%";
+            HappinessBar.Value = _engine.Player.Happiness;
             SmartsBlock.Text = $"{_engine.Player.Smarts}%";
+            SmartsBar.Value = _engine.Player.Smarts;
             LooksBlock.Text = $"{_engine.Player.Looks}%";
+            LooksBar.Value = _engine.Player.Looks;
             MoneyBlock.Text = $"${_engine.Player.Money}";
             EducationBlock.Text = _engine.Player.CurrentEducation;
             JobBlock.Text = _engine.Player.CurrentJob?.Title ?? "Unemployed";
