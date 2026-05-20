@@ -1,0 +1,73 @@
+[
+  {
+    "PromptText": "You found a wallet on the ground. What do you do?",
+    "Choices": [
+      {
+        "Text": "Keep the money",
+        "StatChanges": {
+          "Money": 100,
+          "Happiness": 10,
+          "Smarts": -5
+        }
+      },
+      {
+        "Text": "Turn it in to the police",
+        "StatChanges": {
+          "Happiness": 5,
+          "Smarts": 5
+        }
+      },
+      {
+        "Text": "Leave it alone",
+        "StatChanges": {}
+      }
+    ]
+  },
+  {
+    "PromptText": "A bully at school is picking on you. What do you do?",
+    "Choices": [
+      {
+        "Text": "Fight back",
+        "StatChanges": {
+          "Health": -10,
+          "Happiness": 10,
+          "Looks": -5
+        }
+      },
+      {
+        "Text": "Tell a teacher",
+        "StatChanges": {
+          "Happiness": -5,
+          "Smarts": 5
+        }
+      },
+      {
+        "Text": "Run away",
+        "StatChanges": {
+          "Happiness": -10,
+          "Health": 5
+        }
+      }
+    ]
+  },
+  {
+    "PromptText": "You are offered a suspicious pill at a party. What do you do?",
+    "Choices": [
+      {
+        "Text": "Take it",
+        "StatChanges": {
+          "Health": -30,
+          "Happiness": 20,
+          "Smarts": -20
+        }
+      },
+      {
+        "Text": "Refuse",
+        "StatChanges": {
+          "Happiness": -5,
+          "Smarts": 10
+        }
+      }
+    ]
+  }
+]
