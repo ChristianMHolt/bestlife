@@ -59,7 +59,7 @@ namespace BitLifeClone
             HealthBar.Value = _engine.Player.Health;
             HappinessBlock.Text = $"{_engine.Player.Happiness}%";
             HappinessBar.Value = _engine.Player.Happiness;
-            SmartsBlock.Text = $"{_engine.Player.Smarts}%";
+            SmartsBlock.Text = $"{_engine.Player.Smarts:0.##}%";
             SmartsBar.Value = _engine.Player.Smarts;
             LooksBlock.Text = $"{_engine.Player.Looks}%";
             LooksBar.Value = _engine.Player.Looks;
@@ -125,6 +125,163 @@ namespace BitLifeClone
         {
             _engine.ReadBook();
             UpdateUI();
+        }
+
+        private void DietButton_Click(object? sender, RoutedEventArgs e)
+        {
+            _engine.Diet();
+            UpdateUI();
+        }
+
+        private void GardenButton_Click(object? sender, RoutedEventArgs e)
+        {
+            _engine.Garden();
+            UpdateUI();
+        }
+
+        private void LibraryButton_Click(object? sender, RoutedEventArgs e)
+        {
+            _engine.VisitLibrary();
+            UpdateUI();
+        }
+
+        private void MeditateButton_Click(object? sender, RoutedEventArgs e)
+        {
+            _engine.Meditate();
+            UpdateUI();
+        }
+
+        private void WalkButton_Click(object? sender, RoutedEventArgs e)
+        {
+            _engine.GoForWalk();
+            UpdateUI();
+        }
+
+        private int _iqTestQuestionIndex = 0;
+        private double _iqTestSmartsGained = 0;
+
+        private void IQTestButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (_engine.Player == null || _engine.Player.Health <= 0) return;
+            if (!_engine.CanDoActivity("IQ Test")) return;
+
+            _iqTestQuestionIndex = 0;
+            _iqTestSmartsGained = 0;
+            IQTestOverlay.IsVisible = true;
+            ShowNextIQTestQuestion();
+        }
+
+        private void ShowNextIQTestQuestion()
+        {
+            if (_iqTestQuestionIndex >= 20)
+            {
+                IQTestOverlay.IsVisible = false;
+                _engine.Log($"You completed the IQ Test! You gained {_iqTestSmartsGained:0.##}% Smarts.");
+                UpdateUI();
+                return;
+            }
+
+            Random rand = new Random();
+            int diffLevel = _iqTestQuestionIndex / 4; // 0: very easy, 1: easy, 2: medium, 3: hard, 4: very hard
+
+            int a = 0, b = 0;
+            string op = "+";
+            int correctAnswer = 0;
+
+            if (diffLevel == 0)
+            {
+                a = rand.Next(1, 10);
+                b = rand.Next(1, 10);
+                op = "+";
+                correctAnswer = a + b;
+            }
+            else if (diffLevel == 1)
+            {
+                a = rand.Next(10, 50);
+                b = rand.Next(1, 20);
+                op = "-";
+                correctAnswer = a - b;
+            }
+            else if (diffLevel == 2)
+            {
+                a = rand.Next(2, 12);
+                b = rand.Next(2, 12);
+                op = "*";
+                correctAnswer = a * b;
+            }
+            else if (diffLevel == 3)
+            {
+                b = rand.Next(2, 10);
+                correctAnswer = rand.Next(2, 20);
+                a = b * correctAnswer;
+                op = "/";
+            }
+            else
+            {
+                int rOp = rand.Next(0, 4);
+                if (rOp == 0) { a = rand.Next(50, 200); b = rand.Next(50, 200); op = "+"; correctAnswer = a + b; }
+                else if (rOp == 1) { a = rand.Next(50, 200); b = rand.Next(10, 100); op = "-"; correctAnswer = a - b; }
+                else if (rOp == 2) { a = rand.Next(10, 30); b = rand.Next(5, 20); op = "*"; correctAnswer = a * b; }
+                else { b = rand.Next(5, 20); correctAnswer = rand.Next(5, 30); a = b * correctAnswer; op = "/"; }
+            }
+
+            IQTestQuestionBlock.Text = $"Question {_iqTestQuestionIndex + 1}: What is {a} {op} {b}?";
+
+            List<int> choices = new List<int> { correctAnswer };
+            while (choices.Count < 4)
+            {
+                int wrong = correctAnswer + rand.Next(-10, 11);
+                if (wrong != correctAnswer && !choices.Contains(wrong))
+                {
+                    choices.Add(wrong);
+                }
+            }
+
+            // Shuffle choices
+            for (int i = 0; i < choices.Count; i++)
+            {
+                int temp = choices[i];
+                int randomIndex = rand.Next(i, choices.Count);
+                choices[i] = choices[randomIndex];
+                choices[randomIndex] = temp;
+            }
+
+            IQTestChoicesPanel.Children.Clear();
+            foreach (var choice in choices)
+            {
+                var btn = new Button
+                {
+                    Content = choice.ToString(),
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
+                    HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center
+                };
+                int selectedAnswer = choice;
+                int correctAns = correctAnswer;
+                btn.Click += (s, e) =>
+                {
+                    if (selectedAnswer == correctAns)
+                    {
+                        if (_iqTestSmartsGained < 5.0)
+                        {
+                            _iqTestSmartsGained += 0.25;
+                            if (_engine.Player != null)
+                            {
+                                _engine.Player.Smarts += 0.25;
+                                _engine.ClampStats();
+                            }
+                        }
+                        _iqTestQuestionIndex++;
+                        ShowNextIQTestQuestion();
+                    }
+                    else
+                    {
+                        IQTestOverlay.IsVisible = false;
+                        _engine.Log($"You answered incorrectly on question {_iqTestQuestionIndex + 1}. You gained {_iqTestSmartsGained:0.##}% Smarts from the test.");
+                        UpdateUI();
+                    }
+                };
+                IQTestChoicesPanel.Children.Add(btn);
+            }
         }
 
         // --- Education & Career ---

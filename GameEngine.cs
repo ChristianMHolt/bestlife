@@ -11,6 +11,8 @@ namespace BitLifeClone
         public EventSystem EventSystem { get; private set; }
         public Action<Event>? OnEventTriggered { get; set; }
 
+        private HashSet<string> _activitiesDoneThisYear = new HashSet<string>();
+
         public GameEngine()
         {
             _random = new Random();
@@ -29,18 +31,29 @@ namespace BitLifeClone
             ClampStats();
         }
 
-        private void Log(string message)
+        public void Log(string message)
         {
             OnLog?.Invoke(message);
         }
 
-        private void ClampStats()
+        public void ClampStats()
         {
             if (Player == null) return;
             Player.Health = Math.Clamp(Player.Health, 0, 100);
             Player.Happiness = Math.Clamp(Player.Happiness, 0, 100);
             Player.Smarts = Math.Clamp(Player.Smarts, 0, 100);
             Player.Looks = Math.Clamp(Player.Looks, 0, 100);
+        }
+
+        public bool CanDoActivity(string activityName)
+        {
+            if (_activitiesDoneThisYear.Contains(activityName))
+            {
+                Log($"You have already done {activityName} this year.");
+                return false;
+            }
+            _activitiesDoneThisYear.Add(activityName);
+            return true;
         }
 
         public bool CheckDeath()
@@ -60,6 +73,7 @@ namespace BitLifeClone
             if (Player == null || Player.Health <= 0) return;
 
             Player.Age++;
+            _activitiesDoneThisYear.Clear();
             Log($"You aged up to {Player.Age} years old.");
 
             Player.Happiness += _random.Next(-5, 6);
@@ -104,6 +118,14 @@ namespace BitLifeClone
         {
             if (Player == null || Player.Health <= 0) return;
 
+            if (Player.Age < 12)
+            {
+                Log("You are too young to hit the gym. Wait until you are 12.");
+                return;
+            }
+
+            if (!CanDoActivity("the Gym")) return;
+
             Log("You hit the gym.");
             Player.Health += _random.Next(1, 5);
             Player.Looks += _random.Next(1, 3);
@@ -116,10 +138,63 @@ namespace BitLifeClone
         {
             if (Player == null || Player.Health <= 0) return;
 
+            if (!CanDoActivity("Reading")) return;
+
             Log("You read a book.");
             Player.Smarts += _random.Next(1, 5);
             Player.Happiness += _random.Next(0, 3);
 
+            ClampStats();
+        }
+
+        public void Diet()
+        {
+            if (Player == null || Player.Health <= 0) return;
+            if (!CanDoActivity("Dieting")) return;
+            Log("You went on a diet.");
+            Player.Health += _random.Next(1, 4);
+            Player.Looks += _random.Next(0, 3);
+            Player.Happiness -= _random.Next(0, 3);
+            ClampStats();
+        }
+
+        public void Garden()
+        {
+            if (Player == null || Player.Health <= 0) return;
+            if (!CanDoActivity("Gardening")) return;
+            Log("You did some gardening.");
+            Player.Happiness += _random.Next(1, 4);
+            Player.Health += _random.Next(0, 2);
+            ClampStats();
+        }
+
+        public void VisitLibrary()
+        {
+            if (Player == null || Player.Health <= 0) return;
+            if (!CanDoActivity("Visiting the Library")) return;
+            Log("You visited the library.");
+            Player.Smarts += _random.Next(1, 4);
+            Player.Happiness += _random.Next(0, 3);
+            ClampStats();
+        }
+
+        public void Meditate()
+        {
+            if (Player == null || Player.Health <= 0) return;
+            if (!CanDoActivity("Meditating")) return;
+            Log("You meditated.");
+            Player.Happiness += _random.Next(2, 5);
+            Player.Health += _random.Next(0, 2);
+            ClampStats();
+        }
+
+        public void GoForWalk()
+        {
+            if (Player == null || Player.Health <= 0) return;
+            if (!CanDoActivity("Going for a Walk")) return;
+            Log("You went for a walk.");
+            Player.Health += _random.Next(1, 3);
+            Player.Happiness += _random.Next(1, 3);
             ClampStats();
         }
 

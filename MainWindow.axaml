@@ -75,8 +75,23 @@
                     <!-- Activities Panel -->
                     <StackPanel Name="ActivitiesPanel" Spacing="10" Margin="10" IsVisible="False">
                         <Button Content="&lt;- Back" Click="BackButton_Click" HorizontalAlignment="Left" Margin="0,0,0,10" />
-                        <Button Name="GymButton" Content="Go to Gym" Click="GymButton_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
-                        <Button Name="BookButton" Content="Read a Book" Click="BookButton_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                        <TabControl Name="ActivitiesTabControl">
+                            <TabItem Header="Health and Wellness">
+                                <StackPanel Spacing="10">
+                                    <Button Name="GymButton" Content="Go to Gym" Click="GymButton_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Button Name="BookButton" Content="Read a Book" Click="BookButton_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Button Name="DietButton" Content="Dieting" Click="DietButton_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Button Name="GardenButton" Content="Gardening" Click="GardenButton_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Button Name="LibraryButton" Content="Visit Library" Click="LibraryButton_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Button Name="MeditateButton" Content="Meditating" Click="MeditateButton_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Button Name="WalkButton" Content="Go for a Walk" Click="WalkButton_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Button Name="IQTestButton" Content="IQ Test" Click="IQTestButton_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                </StackPanel>
+                            </TabItem>
+                            <TabItem Header="Other">
+                                <TextBlock Text="More activities coming soon!" Margin="10"/>
+                            </TabItem>
+                        </TabControl>
                     </StackPanel>
 
                     <!-- Education & Occupation Panel -->
@@ -135,6 +150,17 @@
                 <Grid RowDefinitions="*,Auto">
                     <TextBlock Grid.Row="0" Name="EventPromptBlock" TextWrapping="Wrap" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <StackPanel Grid.Row="1" Name="EventChoicesPanel" Orientation="Vertical" Spacing="10" />
+                </Grid>
+            </Border>
+        </Border>
+
+        <!-- IQ Test Overlay -->
+        <Border Name="IQTestOverlay" IsVisible="False" Background="#B3000000" Grid.RowSpan="3">
+            <Border Background="#1e293b" Width="500" Height="300" CornerRadius="16" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <TextBlock Grid.Row="0" Text="IQ Test" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock Grid.Row="1" Name="IQTestQuestionBlock" TextWrapping="Wrap" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Row="2" Name="IQTestChoicesPanel" Orientation="Vertical" Spacing="10" />
                 </Grid>
             </Border>
         </Border>
