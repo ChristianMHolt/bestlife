@@ -384,7 +384,7 @@ namespace BitLifeClone
             {
                 var result = _engine.Compliment(_selectedNPC);
                 ComplimentResultBlock.Text = result.OutcomeText;
-                ComplimentProgressBar.Value = result.NewRelationshipStat;
+                ComplimentProgressBar.Value = result.RelationshipChange;
                 ComplimentOverlay.IsVisible = true;
                 UpdateUI();
             }
