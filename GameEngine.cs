@@ -18,6 +18,11 @@ namespace BitLifeClone
             _random = new Random();
             EventSystem = new EventSystem();
         }
+		
+		public bool IsActivityDone(string activityName)
+		{
+			return _activitiesDoneThisYear.Contains(activityName);
+		}
 
         public void StartGame(string name, string gender)
         {
@@ -317,60 +322,68 @@ namespace BitLifeClone
             ClampStats();
         }
 
-        public void AskForMoney(NPC npc)
-        {
-            if (Player == null) return;
+		public void AskForMoney(NPC npc)
+		{
+			if (Player == null) return;
 
-            if (npc.Money <= 0)
-            {
-                Log($"{npc.Name} doesn't have any money to give you.");
-                return;
-            }
+			// Add this check to limit the activity to once per year per NPC
+			if (!CanDoActivity($"Ask {npc.Name} for Money")) return;
 
-            int baseChance = npc.RelationshipStat;
-            if (npc.RelationType == "Parent")
-            {
-                baseChance += 20;
-            }
-            else if (npc.RelationType == "Sibling")
-            {
-                baseChance += 10;
-            }
+			if (npc.Money <= 0)
+			{
+				Log($"{npc.Name} doesn't have any money to give you.");
+				return;
+			}
 
-            if (_random.Next(0, 100) < baseChance)
-            {
-                decimal amountToGive = Math.Min(npc.Money, (decimal)(_random.NextDouble() * 10000));
+			int baseChance = npc.RelationshipStat;
+			if (npc.RelationType == "Parent")
+			{
+				baseChance += 20;
+			}
+			else if (npc.RelationType == "Sibling")
+			{
+				baseChance += 10;
+			}
 
-                if (Player.Age < 18)
-                {
-                    amountToGive = Math.Min(amountToGive, (decimal)(_random.NextDouble() * 100 + 10)); // Children get way less
-                }
+			if (_random.Next(0, 100) < baseChance)
+			{
+				decimal amountToGive = Math.Min(npc.Money, (decimal)(_random.NextDouble() * 10000));
 
-                amountToGive = Math.Round(amountToGive, 2);
+				if (Player.Age < 18)
+				{
+					amountToGive = Math.Min(amountToGive, (decimal)(_random.NextDouble() * 100 + 10)); // Children get way less
+				}
 
-                if (amountToGive > 0)
-                {
-                    npc.Money -= amountToGive;
-                    Player.Money += amountToGive;
-                    Log($"{npc.Name} gave you ${amountToGive}.");
-                }
-                else
-                {
-                    Log($"{npc.Name} agreed to give you money, but didn't have enough to spare.");
-                }
-            }
-            else
-            {
-                Log($"{npc.Name} refused to give you money.");
-                npc.RelationshipStat -= _random.Next(1, 6);
-                npc.RelationshipStat = Math.Clamp(npc.RelationshipStat, 0, 100);
-            }
-            ClampStats();
-        }
+				amountToGive = Math.Round(amountToGive, 2);
+
+				if (amountToGive > 0)
+				{
+					npc.Money -= amountToGive;
+					Player.Money += amountToGive;
+					Log($"{npc.Name} gave you ${amountToGive}.");
+				}
+				else
+				{
+					Log($"{npc.Name} agreed to give you money, but didn't have enough to spare.");
+				}
+			}
+			else
+			{
+				Log($"{npc.Name} refused to give you money.");
+				npc.RelationshipStat -= _random.Next(1, 6);
+				npc.RelationshipStat = Math.Clamp(npc.RelationshipStat, 0, 100);
+			}
+			ClampStats();
+		}
 
         public ComplimentResult Compliment(NPC npc)
         {
             if (Player == null) return new ComplimentResult("You tried to compliment them, but you don't exist.", npc.RelationshipStat, 0);
+			
+			if (!CanDoActivity($"Compliment {npc.Name}")) 
+			{
+				return new ComplimentResult($"You already complimented {npc.Name} this year.", npc.RelationshipStat, 0);
+			}
 
             int oldStat = npc.RelationshipStat;
             bool backfire = false;
@@ -407,16 +420,19 @@ namespace BitLifeClone
         }
 
         public void ArgueWith(NPC npc)
-        {
-            if (Player == null) return;
+		{
+			if (Player == null) return;
+			
+			// Add this check
+			if (!CanDoActivity($"Argue With {npc.Name}")) return;
 
-            Log($"You argued with {npc.Name}.");
-            npc.RelationshipStat -= _random.Next(10, 20);
-            npc.RelationshipStat = Math.Clamp(npc.RelationshipStat, 0, 100);
+			Log($"You argued with {npc.Name}.");
+			npc.RelationshipStat -= _random.Next(10, 20);
+			npc.RelationshipStat = Math.Clamp(npc.RelationshipStat, 0, 100);
 
-            Player.Happiness -= _random.Next(5, 10);
-            ClampStats();
-        }
+			Player.Happiness -= _random.Next(5, 10);
+			ClampStats();
+		}
     }
 
     public class ComplimentResult

@@ -69,7 +69,42 @@ namespace BitLifeClone
 
             RelationshipsList.ItemsSource = null;
             RelationshipsList.ItemsSource = _engine.Player.Relationships;
+			
+			// Only update activity buttons if the player is alive
+			if (_engine.Player.Health > 0)
+			{
+				GymButton.IsEnabled = !_engine.IsActivityDone("the Gym");
+				BookButton.IsEnabled = !_engine.IsActivityDone("Reading");
+				DietButton.IsEnabled = !_engine.IsActivityDone("Dieting");
+				GardenButton.IsEnabled = !_engine.IsActivityDone("Gardening");
+				LibraryButton.IsEnabled = !_engine.IsActivityDone("Visiting the Library");
+				MeditateButton.IsEnabled = !_engine.IsActivityDone("Meditating");
+				WalkButton.IsEnabled = !_engine.IsActivityDone("Going for a Walk");
+				IQTestButton.IsEnabled = !_engine.IsActivityDone("IQ Test");
+
+				UpdateRelationshipButtons();
+			}
         }
+		
+		private void UpdateRelationshipButtons()
+		{
+			if (_selectedNPC != null && _engine.Player?.Health > 0)
+			{
+				SpendTimeButton.IsEnabled = !_engine.IsActivityDone($"Spend Time With {_selectedNPC.Name}");
+				AskMoneyButton.IsEnabled = !_engine.IsActivityDone($"Ask {_selectedNPC.Name} for Money");
+				
+				// These default to true unless you also add CanDoActivity limits to them in GameEngine
+				ArgueButton.IsEnabled = !_engine.IsActivityDone($"Argue With {_selectedNPC.Name}");
+				ComplimentButton.IsEnabled = !_engine.IsActivityDone($"Compliment {_selectedNPC.Name}"); 
+			}
+			else
+			{
+				SpendTimeButton.IsEnabled = false;
+				AskMoneyButton.IsEnabled = false;
+				ArgueButton.IsEnabled = false;
+				ComplimentButton.IsEnabled = false;
+			}
+		}
 
         private void Log(string message)
         {
@@ -348,6 +383,7 @@ namespace BitLifeClone
             if (RelationshipsList.SelectedItem is NPC npc)
             {
                 _selectedNPC = npc;
+				UpdateRelationshipButtons();
             }
         }
 
@@ -378,17 +414,53 @@ namespace BitLifeClone
             }
         }
 
-        private void Compliment_Click(object? sender, RoutedEventArgs e)
-        {
-            if (_selectedNPC != null)
-            {
-                var result = _engine.Compliment(_selectedNPC);
-                ComplimentResultBlock.Text = result.OutcomeText;
-                ComplimentProgressBar.Value = result.RelationshipChange;
-                ComplimentOverlay.IsVisible = true;
-                UpdateUI();
-            }
-        }
+		private void Compliment_Click(object? sender, RoutedEventArgs e)
+		{
+			if (_selectedNPC != null)
+			{
+				var result = _engine.Compliment(_selectedNPC);
+				
+				// Format the number to show a '+' sign for positive values
+				string changeString = result.RelationshipChange > 0 ? $"+{result.RelationshipChange}" : result.RelationshipChange.ToString();
+
+				// Append the exact change to the text shown in the popup
+				ComplimentResultBlock.Text = $"{result.OutcomeText}\n\nRelationship Change: {changeString}";
+
+				// Calculate a visual percentage so a change of 0 is exactly at 50%
+				double visualPercentage = 50.0;
+				
+				if (result.RelationshipChange < 0)
+				{
+					// Maps a decrease (-30 to 0) into the 0% to 50% range of the bar
+					visualPercentage = 50.0 - (Math.Abs(result.RelationshipChange) / 30.0 * 50.0);
+				}
+				else if (result.RelationshipChange > 0)
+				{
+					// Maps an increase (0 to 15) into the 50% to 100% range of the bar
+					visualPercentage = 50.0 + (result.RelationshipChange / 15.0 * 50.0);
+				}
+
+				// Apply the calculated percentage to the progress bar
+				ComplimentProgressBar.Value = Math.Clamp(visualPercentage, 0, 100);
+
+				// Apply solid colors based on the magnitude of the change
+				if (result.RelationshipChange <= -10)
+				{
+					ComplimentProgressBar.Foreground = Avalonia.Media.Brushes.Red;
+				}
+				else if (result.RelationshipChange >= 5)
+				{
+					ComplimentProgressBar.Foreground = Avalonia.Media.Brushes.Green;
+				}
+				else
+				{
+					ComplimentProgressBar.Foreground = Avalonia.Media.Brushes.Orange;
+				}
+
+				ComplimentOverlay.IsVisible = true;
+				UpdateUI();
+			}
+		}
 
         private void ComplimentOK_Click(object? sender, RoutedEventArgs e)
         {
@@ -415,7 +487,7 @@ namespace BitLifeClone
             RelationshipsPanel.IsVisible = true;
         }
 
-        private void BackButton_Click(object? sender, RoutedEventArgs e)
+        private void BackButton_Click(object? sender, RoutedEventArgs? e)
         {
             ActivitiesPanel.IsVisible = false;
             EducationPanel.IsVisible = false;
