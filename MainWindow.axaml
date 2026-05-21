@@ -174,11 +174,11 @@
             <Border Background="#1e293b" Width="400" Height="250" CornerRadius="16" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Grid RowDefinitions="*,Auto,Auto">
                     <TextBlock Grid.Row="0" Name="ComplimentResultBlock" TextWrapping="Wrap" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ProgressBar Grid.Row="1" Name="ComplimentProgressBar" Minimum="0" Maximum="100" Height="20" Margin="0,20,0,20">
+                    <ProgressBar Grid.Row="1" Name="ComplimentProgressBar" Minimum="-30" Maximum="15" Height="20" Margin="0,20,0,20">
                         <ProgressBar.Foreground>
                             <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
                                 <GradientStop Color="Red" Offset="0.0" />
-                                <GradientStop Color="Orange" Offset="0.5" />
+                                <GradientStop Color="Orange" Offset="0.67" />
                                 <GradientStop Color="Green" Offset="1.0" />
                             </LinearGradientBrush>
                         </ProgressBar.Foreground>

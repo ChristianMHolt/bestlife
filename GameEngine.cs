@@ -370,8 +370,9 @@ namespace BitLifeClone
 
         public ComplimentResult Compliment(NPC npc)
         {
-            if (Player == null) return new ComplimentResult("You tried to compliment them, but you don't exist.", npc.RelationshipStat);
+            if (Player == null) return new ComplimentResult("You tried to compliment them, but you don't exist.", npc.RelationshipStat, 0);
 
+            int oldStat = npc.RelationshipStat;
             bool backfire = false;
 
             if (npc.RelationshipStat < 50)
@@ -399,9 +400,10 @@ namespace BitLifeClone
             }
 
             npc.RelationshipStat = Math.Clamp(npc.RelationshipStat, 0, 100);
+            int actualChange = npc.RelationshipStat - oldStat;
             Log(resultText);
 
-            return new ComplimentResult(resultText, npc.RelationshipStat);
+            return new ComplimentResult(resultText, npc.RelationshipStat, actualChange);
         }
 
         public void ArgueWith(NPC npc)
@@ -421,11 +423,13 @@ namespace BitLifeClone
     {
         public string OutcomeText { get; set; }
         public int NewRelationshipStat { get; set; }
+        public int RelationshipChange { get; set; }
 
-        public ComplimentResult(string outcomeText, int newRelationshipStat)
+        public ComplimentResult(string outcomeText, int newRelationshipStat, int relationshipChange)
         {
             OutcomeText = outcomeText;
             NewRelationshipStat = newRelationshipStat;
+            RelationshipChange = relationshipChange;
         }
     }
 }
