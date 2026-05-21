@@ -124,6 +124,10 @@
                             <Button Name="SpendTimeButton" Content="Spend Time" Click="SpendTime_Click" />
                             <Button Name="ArgueButton" Content="Argue" Click="Argue_Click" />
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Button Name="AskMoneyButton" Content="Ask for Money" Click="AskMoney_Click" />
+                            <Button Name="ComplimentButton" Content="Compliment" Click="Compliment_Click" />
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
 
@@ -161,6 +165,25 @@
                     <TextBlock Grid.Row="0" Text="IQ Test" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
                     <TextBlock Grid.Row="1" Name="IQTestQuestionBlock" TextWrapping="Wrap" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <StackPanel Grid.Row="2" Name="IQTestChoicesPanel" Orientation="Vertical" Spacing="10" />
+                </Grid>
+            </Border>
+        </Border>
+
+        <!-- Compliment Overlay -->
+        <Border Name="ComplimentOverlay" IsVisible="False" Background="#B3000000" Grid.RowSpan="3">
+            <Border Background="#1e293b" Width="400" Height="250" CornerRadius="16" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid RowDefinitions="*,Auto,Auto">
+                    <TextBlock Grid.Row="0" Name="ComplimentResultBlock" TextWrapping="Wrap" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <ProgressBar Grid.Row="1" Name="ComplimentProgressBar" Minimum="0" Maximum="100" Height="20" Margin="0,20,0,20">
+                        <ProgressBar.Foreground>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                                <GradientStop Color="Red" Offset="0.0" />
+                                <GradientStop Color="Orange" Offset="0.5" />
+                                <GradientStop Color="Green" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </ProgressBar.Foreground>
+                    </ProgressBar>
+                    <Button Grid.Row="2" Content="OK" Click="ComplimentOK_Click" HorizontalAlignment="Center" Width="100" HorizontalContentAlignment="Center"/>
                 </Grid>
             </Border>
         </Border>

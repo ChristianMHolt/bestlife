@@ -93,6 +93,8 @@ namespace BitLifeClone
             ApplyJobButton.IsEnabled = enable;
             SpendTimeButton.IsEnabled = enable;
             ArgueButton.IsEnabled = enable;
+            AskMoneyButton.IsEnabled = enable;
+            ComplimentButton.IsEnabled = enable;
 
             ShowActivitiesButton.IsEnabled = enable;
             ShowEducationButton.IsEnabled = enable;
@@ -365,6 +367,32 @@ namespace BitLifeClone
                 _engine.ArgueWith(_selectedNPC);
                 UpdateUI();
             }
+        }
+
+        private void AskMoney_Click(object? sender, RoutedEventArgs e)
+        {
+            if (_selectedNPC != null)
+            {
+                _engine.AskForMoney(_selectedNPC);
+                UpdateUI();
+            }
+        }
+
+        private void Compliment_Click(object? sender, RoutedEventArgs e)
+        {
+            if (_selectedNPC != null)
+            {
+                var result = _engine.Compliment(_selectedNPC);
+                ComplimentResultBlock.Text = result.OutcomeText;
+                ComplimentProgressBar.Value = result.NewRelationshipStat;
+                ComplimentOverlay.IsVisible = true;
+                UpdateUI();
+            }
+        }
+
+        private void ComplimentOK_Click(object? sender, RoutedEventArgs e)
+        {
+            ComplimentOverlay.IsVisible = false;
         }
 
         // --- Navigation ---

@@ -416,16 +416,4 @@ namespace BitLifeClone
             ClampStats();
         }
     }
-
-    public class ComplimentResult
-    {
-        public string OutcomeText { get; set; }
-        public int NewRelationshipStat { get; set; }
-
-        public ComplimentResult(string outcomeText, int newRelationshipStat)
-        {
-            OutcomeText = outcomeText;
-            NewRelationshipStat = newRelationshipStat;
-        }
-    }
 }
