@@ -18,25 +18,24 @@ namespace BitLifeClone
             LoadEvents();
         }
 
-        private void LoadEvents()
-        {
-            try
-            {
-                if (File.Exists("events.json"))
-                {
-                    string json = File.ReadAllText("events.json");
-                    var loadedEvents = JsonSerializer.Deserialize<List<Event>>(json);
-                    if (loadedEvents != null)
-                    {
-                        _events = loadedEvents;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading events: {ex.Message}");
-            }
-        }
+		private void LoadEvents()
+		{
+			try
+			{
+				using var stream = Avalonia.Platform.AssetLoader.Open(new Uri("avares://BitLifeXplat/events.json"));
+				using var reader = new System.IO.StreamReader(stream);
+				string json = reader.ReadToEnd();
+				var loadedEvents = System.Text.Json.JsonSerializer.Deserialize<List<Event>>(json);
+				if (loadedEvents != null)
+				{
+					_events = loadedEvents;
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Error loading events: {ex.Message}");
+			}
+		}
 
         public Event? GetRandomEvent()
         {

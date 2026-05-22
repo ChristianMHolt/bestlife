@@ -17,6 +17,16 @@ namespace BitLifeClone
         public MainWindow()
         {
             InitializeComponent();
+			
+			var screen = Screens.Primary;
+			if (screen != null)
+			{
+				double areaScaleFactor = Math.Sqrt(0.4); 
+				
+				// Convert physical pixels to Avalonia's device-independent pixels (DIPs)
+				this.Width = (screen.WorkingArea.Width / screen.Scaling) * areaScaleFactor;
+				this.Height = (screen.WorkingArea.Height / screen.Scaling) * areaScaleFactor;
+			}
 
             _engine = new GameEngine();
             _engine.OnLog = Log;
@@ -36,11 +46,11 @@ namespace BitLifeClone
 
         private void StartButton_Click(object? sender, RoutedEventArgs e)
         {
-            string name = string.IsNullOrWhiteSpace(NameTextBox.Text) ? "Unknown" : NameTextBox.Text;
             string gender = GenderComboBox.SelectedIndex == 0 ? "Male" : "Female";
 
             ActivityLog.Items.Clear();
-            _engine.StartGame(name, gender);
+			
+            _engine.StartGame(gender);
 
             SetupPanel.IsVisible = false;
             GamePanel.IsVisible = true;
@@ -527,8 +537,9 @@ namespace BitLifeClone
         {
             GamePanel.IsVisible = false;
             SetupPanel.IsVisible = true;
-            NameTextBox.Text = string.Empty;
+
             GenderComboBox.SelectedIndex = 0;
+			
             _engine = new GameEngine();
             _engine.OnLog = Log;
             _engine.OnEventTriggered = ShowEventPopup;

@@ -1,0 +1,11 @@
+﻿<Solution>
+  <Project Path="BestLifeXplat.Android/BestLifeXplat.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="BestLifeXplat.Browser/BestLifeXplat.Browser.csproj" />
+  <Project Path="BestLifeXplat.Desktop/BestLifeXplat.Desktop.csproj" />
+  <Project Path="BestLifeXplat.iOS/BestLifeXplat.iOS.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="BestLifeXplat/BestLifeXplat.csproj" />
+</Solution>

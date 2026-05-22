@@ -5,6 +5,21 @@ namespace BitLifeClone
 {
     public class GameEngine
     {
+		private readonly string[] _maleNames = { "James", "John", "Robert", "Michael", "William", "David", "Richard", "Joseph", "Thomas", "Charles", "Daniel", "Matthew" };
+		private readonly string[] _femaleNames = { "Mary", "Patricia", "Jennifer", "Linda", "Elizabeth", "Barbara", "Susan", "Jessica", "Sarah", "Karen", "Nancy", "Lisa" };
+		private readonly string[] _lastNames = { "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Taylor", "Anderson" };
+
+		public string GenerateFullName(string gender, string? forcedLastName = null)
+		{
+			string firstName = gender == "Male" 
+				? _maleNames[_random.Next(_maleNames.Length)] 
+				: _femaleNames[_random.Next(_femaleNames.Length)];
+				
+			string lastName = forcedLastName ?? _lastNames[_random.Next(_lastNames.Length)];
+			
+			return $"{firstName} {lastName}";
+		}
+		
         public Player? Player { get; private set; }
         private Random _random;
         public Action<string>? OnLog { get; set; }
@@ -24,17 +39,26 @@ namespace BitLifeClone
 			return _activitiesDoneThisYear.Contains(activityName);
 		}
 
-        public void StartGame(string name, string gender)
-        {
-            Player = new Player(name, gender);
-            Log($"You were born a {gender.ToLower()}. Your name is {name}.");
+		public void StartGame(string gender)
+		{
+			// Generate a family last name to be shared
+			string familyLastName = _lastNames[_random.Next(_lastNames.Length)];
+			
+			// Generate player's name using the family last name
+			string playerName = GenerateFullName(gender, familyLastName);
 
-            // Generate parents
-            Player.Relationships.Add(new NPC("Mom", "Parent", _random.Next(50, 100)));
-            Player.Relationships.Add(new NPC("Dad", "Parent", _random.Next(50, 100)));
+			Player = new Player(playerName, gender);
+			Log($"You were born a {gender.ToLower()}. Your name is {playerName}.");
 
-            ClampStats();
-        }
+			// Generate parents with real names and the same last name
+			string momName = GenerateFullName("Female", familyLastName);
+			string dadName = GenerateFullName("Male", familyLastName);
+
+			Player.Relationships.Add(new NPC(momName, "Mother", _random.Next(50, 100)));
+			Player.Relationships.Add(new NPC(dadName, "Father", _random.Next(50, 100)));
+
+			ClampStats();
+		}
 
         public void Log(string message)
         {
