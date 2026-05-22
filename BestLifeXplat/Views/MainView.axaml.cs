@@ -2,31 +2,20 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Media;
-using Avalonia.Layout;
+using BitLifeClone;
 
-namespace BitLifeClone
+namespace BitLifeClone.Views
 {
-    public partial class MainWindow : Window
+    public partial class MainView : UserControl
     {
         private GameEngine _engine;
         private List<Job> _availableJobs;
         private Job? _selectedJob;
         private NPC? _selectedNPC;
 
-        public MainWindow()
+        public MainView()
         {
             InitializeComponent();
-			
-			var screen = Screens.Primary;
-			if (screen != null)
-			{
-				double areaScaleFactor = Math.Sqrt(0.4); 
-				
-				// Convert physical pixels to Avalonia's device-independent pixels (DIPs)
-				this.Width = (screen.WorkingArea.Width / screen.Scaling) * areaScaleFactor;
-				this.Height = (screen.WorkingArea.Height / screen.Scaling) * areaScaleFactor;
-			}
 
             _engine = new GameEngine();
             _engine.OnLog = Log;
