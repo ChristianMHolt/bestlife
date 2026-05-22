@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Controls;
 
-namespace BitLifeClone.Views
+namespace BestLifeXplat.Views
 {
     public partial class MainWindow : Window
     {

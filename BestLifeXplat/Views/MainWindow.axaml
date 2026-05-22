@@ -1,7 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:views="clr-namespace:BitLifeClone.Views"
-        x:Class="BitLifeClone.Views.MainWindow"
+        xmlns:views="clr-namespace:BestLifeXplat.Views"
+        x:Class="BestLifeXplat.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="Bestlife"
         WindowStartupLocation="CenterScreen">

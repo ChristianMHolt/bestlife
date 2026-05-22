@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using BitLifeClone;
+using BestLifeXplat;
 
-namespace BitLifeClone.Views
+namespace BestLifeXplat.Views
 {
     public partial class MainView : UserControl
     {
@@ -471,18 +471,21 @@ namespace BitLifeClone.Views
         private void ShowActivities_Click(object? sender, RoutedEventArgs e)
         {
             MainMenuPanel.IsVisible = false;
+            ActivityLog.IsVisible = false; // Hide the log
             ActivitiesPanel.IsVisible = true;
         }
 
         private void ShowEducation_Click(object? sender, RoutedEventArgs e)
         {
             MainMenuPanel.IsVisible = false;
+            ActivityLog.IsVisible = false; // Hide the log
             EducationPanel.IsVisible = true;
         }
 
         private void ShowRelationships_Click(object? sender, RoutedEventArgs e)
         {
             MainMenuPanel.IsVisible = false;
+            ActivityLog.IsVisible = false; // Hide the log
             RelationshipsPanel.IsVisible = true;
         }
 
@@ -491,7 +494,9 @@ namespace BitLifeClone.Views
             ActivitiesPanel.IsVisible = false;
             EducationPanel.IsVisible = false;
             RelationshipsPanel.IsVisible = false;
+            
             MainMenuPanel.IsVisible = true;
+            ActivityLog.IsVisible = true; // Show the log again
         }
 
         // --- Events ---

@@ -1,6 +1,6 @@
 using System;
 
-namespace BitLifeClone
+namespace BestLifeXplat
 {
     public class Player
     {
@@ -15,6 +15,9 @@ namespace BitLifeClone
         public string CurrentEducation { get; set; } = "None";
         public Job? CurrentJob { get; set; }
         public System.Collections.Generic.List<NPC> Relationships { get; set; } = new System.Collections.Generic.List<NPC>();
+
+        // Required for JSON deserialization to instantiate the object
+        public Player() { }
 
         public Player(string name, string gender)
         {

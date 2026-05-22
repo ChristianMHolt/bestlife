@@ -1,8 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 
-namespace BitLifeClone
+namespace BestLifeXplat
 {
+    public class GameSaveData
+    {
+        public Player? Player { get; set; }
+        public HashSet<string> ActivitiesDoneThisYear { get; set; } = new HashSet<string>();
+    }
+
     public class GameEngine
     {
 		private readonly string[] _maleNames = { "James", "John", "Robert", "Michael", "William", "David", "Richard", "Joseph", "Thomas", "Charles", "Daniel", "Matthew" };
@@ -32,6 +40,52 @@ namespace BitLifeClone
         {
             _random = new Random();
             EventSystem = new EventSystem();
+        }
+
+        public void SaveGame(string filePath)
+        {
+            try
+            {
+                var saveData = new GameSaveData
+                {
+                    Player = this.Player,
+                    ActivitiesDoneThisYear = this._activitiesDoneThisYear
+                };
+                
+                string jsonString = JsonSerializer.Serialize(saveData, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(filePath, jsonString);
+                Log("Game saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Log($"Failed to save game: {ex.Message}");
+            }
+        }
+
+        public bool LoadGame(string filePath)
+        {
+            if (!File.Exists(filePath)) return false;
+
+            try
+            {
+                string jsonString = File.ReadAllText(filePath);
+                var saveData = JsonSerializer.Deserialize<GameSaveData>(jsonString);
+                
+                if (saveData != null)
+                {
+                    this.Player = saveData.Player;
+                    this._activitiesDoneThisYear = saveData.ActivitiesDoneThisYear ?? new HashSet<string>();
+                    Log("Game loaded successfully.");
+                    ClampStats(); // Ensure loaded stats are within bounds
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log($"Failed to load game: {ex.Message}");
+            }
+            
+            return false;
         }
 		
 		public bool IsActivityDone(string activityName)

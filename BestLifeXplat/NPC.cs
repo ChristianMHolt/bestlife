@@ -1,6 +1,6 @@
 using System;
 
-namespace BitLifeClone
+namespace BestLifeXplat
 {
     public class NPC
     {
